@@ -6,6 +6,8 @@
 2. Google Search Trend: in DataRaw/multitimeline.csv, could be more detailed
 3. GDP: each year's data in DataRaw
 4. *death.csv*: death people number caused by Tesla, raw data in tesla-deaths.csv
+5. *TOTALSA.csv*: Total mobile sales, data collected monthly
+6. 
 
 长线比如GDP，销量什么的，一个fit用，predict似乎没用
 
