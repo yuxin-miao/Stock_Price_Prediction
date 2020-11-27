@@ -18,4 +18,22 @@ def death():
     df.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/death.csv", index=False)
 
 
-death()
+def fullDataSet():
+    # df1 = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/oil.csv")
+    # dfMain = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/TSLA_full.csv")
+
+    # dfMerge = pd.merge(dfMain, df1, how="left")
+    # dfMerge.to_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/temp.csv", index=False)
+    dfTemp = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/temp.csv")
+    dfDeath = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/death.csv")
+    dfTemp['deaths'] = 0
+    #
+    for index, row in dfDeath.iterrows():
+        print(row[0])
+    # dfMerge = pd.concat([dfTemp, dfDeath])
+    # print(dfMerge.head())
+    # dfTemp.append(dfDeath)
+    dfTemp.to_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/temp2.csv", index=False)
+
+fullDataSet()
+
