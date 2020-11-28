@@ -5,10 +5,11 @@ import numpy as np
 
 
 def missingValue():
-    df_transfer = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/DPRIME.csv")
-    df_transfer.replace(to_replace='.', value=0, inplace=True)
-    df_transfer = df_transfer[df_transfer['DATE'] > '2010-06-29']
-    df_transfer.to_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/DPRIME2.csv", index=False)
+    df_transfer = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_27.csv")
+    df_transfer.fillna(0)
+    # df_transfer.replace(to_replace='.', value=0, inplace=True)
+    # df_transfer = df_transfer[df_transfer['DATE'] > '2010-06-29']
+    df_transfer.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_28.csv", index=False)
 
 
 
@@ -83,5 +84,5 @@ def monthlyData():
 
 
 # fullDataSet()
-# missingValue()
-monthlyData()
+missingValue()
+# monthlyData()
