@@ -1,0 +1,152 @@
+---
+title: "proj_arima"
+author: "lbq"
+date: "2020/11/28"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 
+```{r}
+getwd()
+library(forecast)
+TSLA.full = read.csv("11_28.csv", header = T)
+```
+for simple multilinear regression model 
+
+$Y_i = \beta X_i+ \varepsilon_i$
+
+```{r}
+TSLA.full$Date = as.Date(TSLA.full$Date, format = "%Y-%m-%d")
+TSLA.full.lm = lm(Close ~ Volume + OilPrice + deaths + DPRIME + TOTALSA, data = TSLA.full)
+summary(TSLA.full.lm)
+plot(TSLA.full.lm, which = 1)
+```
+
+```{r}
+library(leaps)
+regsubsets.out = regsubsets(
+  Close ~ Volume + OilPrice + deaths + DPRIME + TOTALSA, data = TSLA.full,
+  nbest = 1,
+  nvmax = NULL,
+  method = "exhaustive"
+)
+plot(regsubsets.out , scale = "r2", main = "R^2")
+plot(regsubsets.out , scale = "adjr2", main = "Adjust R^2")
+plot(regsubsets.out , scale = "Cp", main = " Mallow's Cp ")
+plot(regsubsets.out , main = "BIC")
+```
+There is no evidence that the deaths is significant
+
+```{r}
+TSLA.no.deaths.lm = lm(Close ~ Volume + OilPrice + DPRIME + TOTALSA, data = TSLA.full)
+summary(TSLA.no.deaths.lm)
+plot(TSLA.no.deaths.lm, which = 1)
+acf(TSLA.no.deaths.lm$residuals)
+```
+From acf plot the errors are highly correlated.
+```{r}
+plot(TSLA.full$Date, TSLA.full$Close, type = 'l',
+     xlab = "Date", ylab = "Close", main = "Price with date")
+```
+the time series is not stationary so we log the Price and diff it
+```{r}
+Price = log(TSLA.full$Close)
+ndiffs(Price)
+Close.diff = diff(TSLA.full$Close, 1)
+ndiffs(Close.diff)
+Close.diff = diff(Close.diff, 1)
+plot(TSLA.full$Date[1:length(Close.diff)] ,Close.diff, type = 'l',
+     xlab = "Date", ylab = "log Close", main = "log Price with date")
+acf(Close.diff)
+pacf(Close.diff)
+
+```
+
+
+
+```{r}
+auto.arima(TSLA.full$Close, trace = T, xreg = cbind(TSLA.full$Volume, TSLA.full$OilPrice, TSLA.full$DPRIME, TSLA.full$TOTALSA))
+
+```
+
+The best model is ARIMA(1,2,0)
+SO 
+```{r}
+ARIMA.m = arima(TSLA.full$Close, 
+                order = c(1,2,0),
+                xreg = cbind(TSLA.full$Volume, TSLA.full$OilPrice, TSLA.full$DPRIME, TSLA.full$TOTALSA),
+                method="ML")
+summary(ARIMA.m)
+
+```
+```{r}
+plot(ARIMA.m$residuals)
+P = predict(ARIMA.m, 
+        newxreg = cbind(TSLA.full$Volume, TSLA.full$OilPrice, TSLA.full$DPRIME, TSLA.full$TOTALSA)  )
+
+```
+
+
+
+```{r}
+price = ts(data = TSLA.full$Close)
+plot(price)
+acf(price)
+ndiffs(price)
+price.diff2 = diff(price, 2)
+ndiffs(price.diff2)
+price.diff21 = diff(price.diff2, 1)
+ndiffs(price.diff21)
+acf(price.diff21)
+pacf(price.diff21)
+plot(price.diff21)
+
+auto.arima(price, trace = T)
+
+arima.model = arima(price, order = c(3,2,0), method = "ML")
+
+summary(arima.model)
+
+plot(arima.model$residuals)
+
+acf(arima.model$residuals)
+
+qqnorm(arima.model$residuals)
+Box.test(arima.model$residuals, type = "Ljung-Box")
+```
+```{r}
+pred = predict(arima.model, 10)
+pred
+plot(c(2605:2615),price[(length(price)-10) : length(price)-1], type = 'l')
+lines(pred$pred, col = "red")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
