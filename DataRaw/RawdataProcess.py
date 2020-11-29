@@ -19,6 +19,25 @@ def chooseDate():
     df_transfer.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/without_2020.csv", index=False)
 
 
+def contactDF():
+    df1 = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/GoogleTrend.csv")
+    # df1.reset_index(inplace=True)
+    # df2 = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/multiTimeline (1).csv",  skiprows=1)
+    # df2.reset_index(inplace=True)
+    # df3 = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/multiTimeline (2).csv",  skiprows=1)
+    # df3.reset_index(inplace=True)
+    # df4 = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/multiTimeline (3).csv",  skiprows=1)
+    # df4.reset_index(inplace=True)
+    # df = pd.concat([df4, df3, df2, df1])
+    # df.drop(columns='index', inplace=True)
+    # df.to_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/GoogleTrend.csv", index=False)
+    dfMain = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_30.csv")
+
+    # dfMain.insert(0, column="Date", value=dfMain['DATE'])
+    dfMerge = pd.merge(dfMain, df1, how="left")
+    dfMerge.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_29Google.csv", index=False)
+
+
 
 
 def BrentOil():
@@ -89,8 +108,8 @@ def monthlyData():
 
 
 
-
-chooseDate()
+contactDF()
+# chooseDate()
 # fullDataSet()
 # missingValue()
 # monthlyData()
