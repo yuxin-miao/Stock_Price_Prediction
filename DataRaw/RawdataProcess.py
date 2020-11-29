@@ -14,6 +14,12 @@ def missingValue():
     df_transfer.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_28.csv", index=False)
 
 
+def chooseDate():
+    df_transfer = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_28.csv", skiprows=range(2394, 2615))
+    df_transfer.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/without_2020.csv", index=False)
+
+
+
 
 def BrentOil():
     df = pd.read_csv('BrentOilPrices.csv', skiprows=5874, names=['Date', 'OilPrice'])
@@ -84,7 +90,7 @@ def monthlyData():
 
 
 
-
+chooseDate()
 # fullDataSet()
-missingValue()
+# missingValue()
 # monthlyData()
