@@ -104,11 +104,33 @@ def monthlyData():
     dfMain.drop(columns='DATE', inplace=True)
     dfMain.to_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/temp3.csv", index=False)
 
+def processCrash():
+
+    dfMain = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/crash.csv", usecols=['Crash Date/Time'])
+    dfMain.rename(columns={'Crash Date/Time': 'Date'}, inplace=True)
+    datetime = pd.to_datetime(dfMain["Date"], dayfirst=True)
+    dfMain["Date"] = datetime
+    dfMain = dfMain[dfMain['Date'] > '2020-01-01']
+
+    print(dfMain.head())
+
+def addNew():
+    dfMain = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_29Google.csv")
+    datetime = pd.to_datetime(dfMain["Date"], dayfirst=True)
+    dfMain["Date"] = datetime
+    df1 = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/covid-data.csv", usecols=['Date', 'new_cases', 'new_deaths'])
+    datetime = pd.to_datetime(df1["Date"], dayfirst=True)
+    df1["Date"] = datetime
+    dfMerge = pd.merge(dfMain, df1, how="left")
+    dfMerge.fillna(0, inplace=True)
+    # print(dfMerge.head())
+
+    dfMerge.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_30full.csv", index=False)
 
 
-
-
-contactDF()
+# processCrash()
+addNew()
+# contactDF()
 # chooseDate()
 # fullDataSet()
 # missingValue()
