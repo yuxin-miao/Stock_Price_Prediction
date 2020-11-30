@@ -15,9 +15,14 @@ def missingValue():
 
 
 def chooseDate():
-    df_transfer = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_28.csv", skiprows=range(2394, 2615))
-    df_transfer.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/without_2020.csv", index=False)
-
+    df_transfer = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/scaled_centered.csv")
+    df_transfer2 = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_30.csv")
+    # datetime = pd.to_datetime(dfMain["Date"], dayfirst=True)
+    df_transfer.drop(columns='drop', inplace=True)
+    # Date = df_transfer2['Date']
+    df_transfer.insert(0, column="Date", value=df_transfer2['Date'])
+    # df_transfer.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/without_2020.csv", index=False)
+    df_transfer.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_31scale.csv", index=False)
 
 def contactDF():
     df1 = pd.read_csv("/Users/yuxinmiao/Desktop/406proj/DataRaw/GoogleTrend.csv")
@@ -52,9 +57,9 @@ def BrentOil():
 
 
 def death():
-    df = pd.read_csv('tesla-deaths.csv', usecols=['date', 'deaths'])
-    df.sort_values(by='date', inplace=True)
-    df.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/death.csv", index=False)
+    df = pd.read_csv('/Users/yuxinmiao/Desktop/406proj/Dataset/11_30full.csv', usecols=['Date', 'Close'])
+    # df.sort_values(by='date', inplace=True)
+    df.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/use.csv", index=False)
 
 
 def fullDataSet():
@@ -129,7 +134,7 @@ def addNew():
 
     dfMerge.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_30full.csv", index=False)
 
-BrentOil()
+# BrentOil()
 # processCrash()
 # addNew()
 # contactDF()
@@ -137,3 +142,4 @@ BrentOil()
 # fullDataSet()
 # missingValue()
 # monthlyData()
+death()
