@@ -41,12 +41,14 @@ def contactDF():
 
 
 def BrentOil():
-    df = pd.read_csv('BrentOilPrices.csv', skiprows=5874, names=['Date', 'OilPrice'])
-
-    datetime = pd.to_datetime(df["Date"], dayfirst=True)
-    df["Date"] = datetime
-    # print(df.head())
-    df.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/oil.csv", index=False)
+    df = pd.read_table('2020Oil.xls')
+    print(df.head())
+    # df = pd.read_csv('BrentOilPrices.csv', skiprows=5874, names=['Date', 'OilPrice'])
+    #
+    # datetime = pd.to_datetime(df["Date"], dayfirst=True)
+    # df["Date"] = datetime
+    # # print(df.head())
+    # df.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/oil.csv", index=False)
 
 
 def death():
@@ -127,9 +129,9 @@ def addNew():
 
     dfMerge.to_csv("/Users/yuxinmiao/Desktop/406proj/Dataset/11_30full.csv", index=False)
 
-
+BrentOil()
 # processCrash()
-addNew()
+# addNew()
 # contactDF()
 # chooseDate()
 # fullDataSet()
