@@ -2,7 +2,7 @@
 
 
 
-## Data Analysis 
+## Pre-Data Analysis
 
 ### Analyze *Close* price with *Date​*
 
@@ -99,3 +99,43 @@ Where the same situations for
 Therefore, we decide to analyze year 2020 only 
 
 > The following plots implemented in “2020_data_outliers.ipynb”
+
+// TODO 不太确定需不需要
+
+
+
+
+
+
+
+## Data collecting
+
+- Search and Choose possibly useful data
+
+  We intend to choose data from different categories, to prevent data used repeatedly. However, there must exhibt correlation among collected data. 
+
+- //TODO 
+
+  //需要解释每个data含义的table
+
+### Collected Data Analysis
+
+- **Correlation between predictors**. We use $Pearson$ correlation to measure the correlation between predictors 
+
+  <img src="./Analysis/pred1.png" alt="image-20201129153441194" style="zoom:120%;" />
+
+  - correlation = 1 for *Open*, *High*, *Low* prices, as expected.
+  - // 我不知道多大算大诶!!
+  - *Volume* has a bit high correlation with *DPRIME* and *TOTALSA* (0.45 and 0.36) respectively. 
+  - *OilPrice* has rather high correlation with *DPRIME* and *TOTALSA* (0.64 and 0.82) respectively
+
+  This predictors correlated problem will be discussed later. 
+
+- **Collected data as time series**. The predictor itself could be considered as time series. We need to examine its properties and discuss potential issue of using time series to predict a time series.
+
+  - //TODO: time series property 
+
+  - **Granger causality test**  Use time series to predict a time series. We use this statistical hypothesis to 
+
+    
+
