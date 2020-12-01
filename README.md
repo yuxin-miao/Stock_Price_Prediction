@@ -196,21 +196,21 @@ MODELS
 
 First we decide to use muti-linear regression to find which variable is related to the close price
 
-<img src="F:\FA2020\VE406\proj\ARIMA\ar1.png" alt="image-20201130225722531" style="zoom:50%;" /> <img src="F:\FA2020\VE406\proj\ARIMA\ar2" alt="image-20201130225831838" style="zoom:50%;" />
+<img src="./Analysis/ar1.png" alt="image-20201130225722531" style="zoom:50%;" /> <img src="./Analysis/ar2.png" alt="image-20201130225831838" style="zoom:50%;" />
 
-<img src="F:\FA2020\VE406\proj\ARIMA\ar3" alt="image-20201130225850817" style="zoom:50%;" /> <img src="F:\FA2020\VE406\proj\ARIMA\ar4" alt="image-20201130225950829" style="zoom:50%;" />
+<img src="./Analysis/ar3.png" alt="image-20201130225850817" style="zoom:50%;" /> <img src="./Analysis/ar4.png" alt="image-20201130225950829" style="zoom:50%;" />
 
 From the mlr model we can see that the OilPrice , DPRIME, TOTALSA , GoogleTrend, new_cases are relevant
 
-![image-20201130212842805](F:\FA2020\VE406\proj\ARIMA\ar5)
+![image-20201130212842805](./Analysis/ar5.png)
 
 
 
-<img src="F:\FA2020\VE406\proj\ARIMA\ar6" alt="image-20201130213009088" style="zoom: 60%;" />    <img src="F:\FA2020\VE406\proj\ARIMA\ar7.png" alt="image-20201130213335024" style="zoom: 60%;" />       
+<img src="./Analysis/ar6.png" alt="image-20201130213009088" style="zoom: 60%;" />    <img src="./Analysis/ar7.png" alt="image-20201130213335024" style="zoom: 60%;" />       
 
 The residuals shows that the errors are correlated. so we seek AR model for help. First we need the time series to be stationary,  so we take the log of the close price 
 
-<img src="F:\FA2020\VE406\proj\ARIMA\ar8.png" alt="image-20201130213801620" style="zoom:60%;" />   <img src="F:\FA2020\VE406\proj\ARIMA\ar9.png" alt="image-20201130213953728" style="zoom:60%;" />
+<img src="./Analysis/ar8.png" alt="image-20201130213801620" style="zoom:60%;" />   <img src="./Analysis/ar9.png" alt="image-20201130213953728" style="zoom:60%;" />
 
 for the log price, we need first find the order of the AR model. From the acf plot we know that after lag = 10, the residuals will have a low correlation so we tried AR(10) and use the command arima(10, 1, 0) to get the lowest AIC. 
 
@@ -222,9 +222,9 @@ model = arima(TSLA.full$Close,xreg = cbind(o = TSLA.full$OilPrice, d = TSLA.full
 
 we can get the residual plot shown below.
 
-<img src="F:\FA2020\VE406\proj\ARIMA\ar10.png" alt="image-20201130223927985" /> 
+<img src="./Analysis/ar10.png" alt="image-20201130223927985" /> 
 
- ![image-20201201004238427](F:\FA2020\VE406\proj\ARIMA\ar11.png) 
+ ![image-20201201004238427](./Analysis/ar11.png) 
 
   From the diagnose plot we know that the model is reasonable except that there exists heteroskedasticity in the residuals
 
@@ -243,7 +243,7 @@ the model can be written as
 
 $ x_t =  -7.738127*10^{-2}\varepsilon_{t-1}+ 6.574786*10^{-2} \varepsilon_{t-2}  + 0.1122720 \varepsilon_{t-3} + 3.452755*10^{-2} \varepsilon_{t-4} + -0.1751326\varepsilon_{t-5} + \\ -8.9413*10^{-2}\varepsilon_{t-6}+ 2.723*10^{-2} \varepsilon_{t-7}  -0.008678 \varepsilon_{t-8} + 6.9391469*10^{-2} \varepsilon_{t-9} + 0.1386772\varepsilon_{t-10} \\+ 0.71598*oilprice - 4.345113*DPRIME - 4.034938*TOTALSA+0.2014916GoogleTrend + 9.45116*10^{-5} $
 
-![image-20201201011452225](F:\FA2020\VE406\proj\ARIMA\ar12.png)
+![image-20201201011452225](./Analysis/ar12.png)
 
 By splitting the data we used in the model to two parts, the training set and the test set, we can predict the value for the next few days after the training set, and the result is shown in the figure.
 
