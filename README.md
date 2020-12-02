@@ -1,16 +1,24 @@
+
+
+# Source Code Usage
+
+
+
+
+
 # Tesla Stock Price Prediction
 
+**The final model is in **
 
+**The analysis procedure is in **
 
-## Pre-Data Analysis
+The whole project following the flow chart. Our final model is **AR** model. <img src="./Analysis/proce.png" alt="image-20201129152911108" style="zoom:50%;" />
 
-### Analyze *Close* Price with *Date​* as a Univariate Time Series
+## Analyze *Close* Price with *Date​* as a Univariate Time Series
 
 As our goal is to predict the stock *close* price, we decide to analyze the features of *close* variable first.
 
-
-
-> The following plots implemented in “full_data_outliers.ipynb”
+> The following plots implemented in “/Analysis/full_data_outliers.ipynb”
 
 ### Moving Average and Smooth
 
@@ -18,13 +26,17 @@ To reduce the effect of noise and have a better understanding of underlying tren
 
 - Moving average with rolling = 7, 15, 30 respectively 
 
-![image-20201129152911108](/Users/yuxinmiao/Desktop/406proj/x2.png)
+<img src="./Analysis/x2.png" alt="image-20201129152911108" style="zoom:48%;" />
 
 ​		We could see the moving average is highly similar to the original data. 
 
 - Smooth 
 
-![image-20201129153441194](/Users/yuxinmiao/Desktop/406proj/x3.png)
+  LOESS: Locally Weighted Scatterplot Smoothing.  The algorithm works by estimating the smooth y_i by taking the frac*N closest points to (x_i,y_i) based on their x values and estimating y_i using a weighted linear regression.
+
+  https://www.statsmodels.org/stable/generated/statsmodels.nonparametric.smoothers_lowess.lowess.html
+
+<img src="./Analysis/x3.png" alt="image-20201129153441194" style="zoom:48%;" />
 
 ​		The overall trend is increasing and for each method, in year 2020, there is a sharp increase and the trend in the previous year might not be appropriate to predict the stock price in 2020. So we determine to further examine this problem.
 
@@ -39,16 +51,6 @@ For time series data, it has high probability of correlation in itself. So we ge
 Observe that at the previous years, the data has more correlation. While the latest few years the data scatter more. No obvious difference when using different $x$ days. 
 
 <img src="./Analysis/x1.png" alt="image-20201129152348239" style="zoom:80%;" />
-
-And we use ACF plot to see 
-
-> TODO
-
- 
-
-
-
-
 
 Combine with the moving average, we get the plot and the correlated score is calculated through method pearson : standard correlation coefficient
 
@@ -84,29 +86,11 @@ So we choose number=10 and observe the outliers, where we define the points' $|d
 
 Nearly all of the points in year 2020 are considered as outliers, so year 2020 might be better not to predicted using all of the data. 
 
-Where the same situations for 
-
-- IsolationForest
-
-<img src="./Analysis/dis2.png" alt="image-20201129153441194" style="zoom:120%;" />
-
-- OneClassSVM
-
-<img src="./Analysis/dis3.png" alt="image-20201129153441194" style="zoom:120%;" />
-
-- EllipticEnvelope
-
-<img src="./Analysis/dis4.png" alt="image-20201129153441194" style="zoom:120%;" />
-
-Therefore, we decide to analyze year 2020 only 
-
 > The following plots implemented in “2020_data_outliers.ipynb”
 
-// TODO 不太确定需不需要
+**Year 2020 Data Decomposition**
 
-
-
-
+<img src="./Analysis/2.png" alt="image-20201129153441194" style="zoom:120%;" />
 
 ## Data collecting
 
@@ -114,9 +98,7 @@ Therefore, we decide to analyze year 2020 only
 
   We intend to choose data from different categories, to prevent data used repeatedly. However, there must exhibt correlation among collected data. 
 
-- //TODO 
-
-  //需要解释每个data含义的table
+- 
 
 ### Collected Data Analysis
 
@@ -125,110 +107,191 @@ Therefore, we decide to analyze year 2020 only
   <img src="./Analysis/pred1.png" alt="image-20201129153441194" style="zoom:120%;" />
 
   - correlation = 1 for *Open*, *High*, *Low* prices, as expected.
-  - // 我不知道多大算大诶!!
-  - *Volume* has a bit high correlation with *DPRIME* and *TOTALSA* (0.45 and 0.36) respectively. 
-  - *OilPrice* has rather high correlation with *DPRIME* and *TOTALSA* (0.64 and 0.82) respectively
-
+  
   This predictors correlated problem will be discussed later. 
-
+  
 - **Collected data as time series**. The predictor itself could be considered as time series. We need to examine its properties and discuss potential issue of using time series to predict a time series.
 
-  - //TODO: time series property 
-
-  - **Granger causality test**  Use time series to predict a time series. We use this statistical hypothesis to 
-
-  - 
-
-  - 
-
-    
-
-We regularized the data
 
 
-
-
-
-
-
-# Model
-
-## With only year 2020 Close data
-
-
-
-### Analysis based on year 2020 data
-
-> Another notebook
-
-<img src="./Analysis/1.png" alt="image-20201129153441194" style="zoom:120%;" />
-
-
-
-#### Decomposition
-
-<img src="./Analysis/2.png" alt="image-20201129153441194" style="zoom:120%;" />\
-
-Observe that 
-
-- it basically follows an increasing trend
-- some fluctuations and sharp decrease / increase residual exists 
-
-
-
-
-
-**20% test data**, we can’t use cross-validation for this time series, 
-
-MODELS 
-
-## AR
-
-
-
-## MA 
-
-
-
-## ARIMA
-
-## ARIMA Model
+## MLR Analysis
 
 First we decide to use muti-linear regression to find which variable is related to the close price
 
-<img src="./Analysis/ar1.png" alt="image-20201130225722531" style="zoom:50%;" /> <img src="./Analysis/ar2.png" alt="image-20201130225831838" style="zoom:50%;" />
+![image-20201130225722531](/Users/yuxinmiao/Desktop/406proj/ar1.png) ![image-20201130225831838](/Users/yuxinmiao/Desktop/406proj/ar2.png)
 
-<img src="./Analysis/ar3.png" alt="image-20201130225850817" style="zoom:50%;" /> <img src="./Analysis/ar4.png" alt="image-20201130225950829" style="zoom:50%;" />
+![image-20201130225850817](/Users/yuxinmiao/Desktop/406proj/ar3.png) ![image-20201130225950829](/Users/yuxinmiao/Desktop/406proj/ar4.png)
 
 From the mlr model we can see that the OilPrice , DPRIME, TOTALSA , GoogleTrend, new_cases are relevant
 
-![image-20201130212842805](./Analysis/ar5.png)
+![res_lm](/Users/yuxinmiao/Desktop/406proj/res_lm.png)
 
 
 
-<img src="./Analysis/ar6.png" alt="image-20201130213009088" style="zoom: 60%;" />    <img src="./Analysis/ar7.png" alt="image-20201130213335024" style="zoom: 60%;" />       
+![image-20201130213009088](/Users/yuxinmiao/Desktop/406proj/ar6.png)    ![image-20201130213335024](/Users/yuxinmiao/Desktop/406proj/ar7.png)       
 
-The residuals shows that the errors are correlated. so we seek AR model for help. First we need the time series to be stationary,  so we take the log of the close price 
 
-<img src="./Analysis/ar8.png" alt="image-20201130213801620" style="zoom:60%;" />   <img src="./Analysis/ar9.png" alt="image-20201130213953728" style="zoom:60%;" />
+
+
+
+## Problem Addressing
+
+### Monthly Data
+
+Here for the data DPIME and TOTALSA, they are both collected on a monthly basis. Hence for a certain time period, these two parameters will be the same.
+
+<img src="./Analysis/sca_totalsa.png" alt="image-20201129153441194" style="zoom:120%;" />
+
+<img src="./Analysis/sca_dpime.png" alt="image-20201129153441194" style="zoom:120%;" />
+
+Here we want to fit mutilple catogories of data. We notice that for the TOTALSA and DPRIME, these two data are only recorded monthly. However, for our stock price or oil price, the data is collected daily. Hence we would have same TOTALSA and DPRIME for certain stock closing price.
+
+To solve this problem, Generalized Linear Mixed Model(GLMM) is used. The two variables will be taken as random effect, the others taken as the fixed effect. The random effect is assumed to only affect the intercept of the model.
+
+Then we try to compare among these models to decide which model is the best one. We use anova table and compare AIC and BIC among these models.
+
+```R
+Data: data.frame(tesla.training)
+Models:
+tesla.TOTALSA: Close ~ OilPrice + GoogleTrend + new_cases + (1 | TOTALSA)
+tesla.DPRIME: Close ~ OilPrice + GoogleTrend + new_cases + (1 | DPRIME)
+tesla.glmm: Close ~ OilPrice + GoogleTrend + new_cases + (1 | DPRIME) + (1 | 
+tesla.glmm:     TOTALSA)
+              npar    AIC    BIC  logLik deviance  Chisq Df Pr(>Chisq)    
+tesla.TOTALSA    6 1968.4 1988.2  -978.2   1956.4                         
+tesla.DPRIME     6 2329.4 2349.3 -1158.7   2317.4   0.00  0               
+tesla.glmm       7 1970.4 1993.5  -978.2   1956.4 361.04  1  < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+
+The AIC and BIC for the first model is the smallest, then we further check the summary of the model fitted only with TOTALSA.
+
+```R
+Formula: Close ~ OilPrice + GoogleTrend + new_cases + (1 | TOTALSA)
+   Data: data.frame(tesla.training)
+
+REML criterion at convergence: 1963.4
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.2321 -0.4571  0.0706  0.5182  4.3036 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ TOTALSA  (Intercept) 15105.5  122.90  
+ Residual               711.9   26.68  
+Number of obs: 202, groups:  TOTALSA, 10
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept) 1.298e+02  4.520e+01   2.870
+OilPrice    1.360e+00  4.106e-01   3.313
+GoogleTrend 7.110e-01  1.594e-01   4.460
+new_cases   3.365e-04  3.193e-04   1.054
+
+Correlation of Fixed Effects:
+            (Intr) OilPrc GglTrn
+OilPrice    -0.409              
+GoogleTrend -0.231 -0.018       
+new_cases   -0.302  0.197  0.173
+```
+
+Finally we will make predictions based on the tesing dataset. We compare the predicted prices with the real stock closing prices and evaluate the model.
+
+<img src="./Analysis/pred_glmm.png" alt="image-20201129153441194" style="zoom:120%;" />
+
+### Collinearity
+
+> implemented in pca_analysis.Rmd
+
+  In this part, we mainly want to address the problem of collinearity among the regressors.
+The method we use is Principal Component Analysis.
+
+  Firstly, we will load the data into R. We discard the column of Date since it has character symbols. Adj.Close is discarded because it is the same as the closing price. While deaths column has too many zeroes which is not good for selecting regressors.
+
+  Here we conduct PCA analysis using prcomp() function. Before we conduct, we need to scale and center all the data to the same order of magnitudes.
+
+  Then we want to analyze the result of PCA. First of all, we draw the line graph to show how much proportion of variance does each principal component explain. Besides, we also show the numeric value for the cumulative proportion of variance explained by PCA components. Therefore, we pick the first four principal components that explain 92.05% variance, which is enough for our model.
+
+  Furthermore, we show the coefficients of each variable in each PCA component. In case we need it to establish the formula for predicting.
+
+<img src="./Analysis/colli.png" alt="image-20201129153441194" style="zoom:120%;" />
+
+```R
+Importance of components:
+                          PC1    PC2    PC3    PC4     PC5     PC6
+Standard deviation     2.2719 1.7868 1.1550 0.6609 0.59955 0.50071
+Proportion of Variance 0.4692 0.2903 0.1213 0.0397 0.03268 0.02279
+Cumulative Proportion  0.4692 0.7595 0.8808 0.9205 0.95313 0.97593
+                           PC7     PC8     PC9    PC10    PC11
+Standard deviation     0.42512 0.28016 0.05867 0.04045 0.02259
+Proportion of Variance 0.01643 0.00714 0.00031 0.00015 0.00005
+Cumulative Proportion  0.99236 0.99949 0.99980 0.99995 1.00000
+```
+
+Since we have decided to use the first 4 components, then we want to find out the improvement it brings to the collinearity problem.
+
+First we will conduct an overall independence check among the four principal components. We plot the pair plot to see whether there is still relationship in them. On the diagnol we plot histogram to have more information on the components. The upper and lower panels are symmetric and are the scattered plots.
+
+<img src="./Analysis/cor_pca.png" alt="image-20201129153441194" style="zoom:120%;" />
+
+Also we show the correlation matrix,
+
+```R
+[,1] [,2] [,3] [,4]
+[1,]    1    0    0    0
+[2,]    0    1    0    0
+[3,]    0    0    1    0
+[4,]    0    0    0    1
+
+n= 222 
+
+
+P
+     [,1] [,2] [,3] [,4]
+[1,]       1    1    1  
+[2,]  1         1    1  
+[3,]  1    1         1  
+[4,]  1    1    1      
+```
+
+From the covariance matrix, we know that PCA can solve the collinearity problem to a large extent. And the plot also shows that PCA components are fairly independent since there is no significant trend in the plots.
+
+
+
+
+
+### Time Series
+
+#### AR
+
+The residuals shows that the errors are correlated. so we seek AR model for help.  The ar model could solve the corelated errors
+
+![image-20201201092224335](/Users/yuxinmiao/Desktop/406proj/ar9.png)
+
+![image-20201201092716458](/Users/yuxinmiao/Desktop/406proj/res_arima.png)
+
+The model we used is AR(10) and then we can construct the final model of the price using AR model.
+
+![image-20201201091948465](/Users/yuxinmiao/Desktop/406proj/ar0.png)
+
+by splitting the data set to two parts, and we use the first part as the training set, we can get the sum of squared error which is
+
+5089.507.
+
+#### ARIMA Model
+
+First we need the time series to be stationary,  so we take the log of the close price 
+
+![image-20201130213801620](/Users/yuxinmiao/Desktop/406proj/ar8.png)   ![image-20201130213953728](/Users/yuxinmiao/Desktop/406proj/ar9-6832562.png)
 
 for the log price, we need first find the order of the AR model. From the acf plot we know that after lag = 10, the residuals will have a low correlation so we tried AR(10) and use the command arima(10, 1, 0) to get the lowest AIC. 
 
 Then we add the other variables into the model so that we can call 
 
-```R
-model = arima(TSLA.full$Close,xreg = cbind(o = TSLA.full$OilPrice, d = TSLA.full$DPRIME, t = TSLA.full$TOTALSA, g = TSLA.full$GoogleTrend, n = TSLA.full$new_cases),order = c(10,1,0))
 ```
-
-we can get the residual plot shown below.
-
-<img src="./Analysis/ar10.png" alt="image-20201130223927985" /> 
-
- ![image-20201201004238427](./Analysis/ar11.png) 
-
-  From the diagnose plot we know that the model is reasonable except that there exists heteroskedasticity in the residuals
-
-```R
+model = arima(TSLA.full$Close,xreg = cbind(o = TSLA.full$OilPrice, d = TSLA.full$DPRIME, t = TSLA.full$TOTALSA, g = TSLA.full$GoogleTrend, n = TSLA.full$new_cases),order = c(10,1,0))
 > model$coef
 
  ar1           ar2           ar3           ar4           ar5           ar6 
@@ -239,17 +302,47 @@ we can get the residual plot shown below.
 -4.034938e+01  2.014916e-01  9.451161e-05
 ```
 
-the model can be written as
+![var](/Users/yuxinmiao/Desktop/406proj/var.png)
 
-$ x_t =  -7.738127*10^{-2}\varepsilon_{t-1}+ 6.574786*10^{-2} \varepsilon_{t-2}  + 0.1122720 \varepsilon_{t-3} + 3.452755*10^{-2} \varepsilon_{t-4} + -0.1751326\varepsilon_{t-5} + \\ -8.9413*10^{-2}\varepsilon_{t-6}+ 2.723*10^{-2} \varepsilon_{t-7}  -0.008678 \varepsilon_{t-8} + 6.9391469*10^{-2} \varepsilon_{t-9} + 0.1386772\varepsilon_{t-10} \\+ 0.71598*oilprice - 4.345113*DPRIME - 4.034938*TOTALSA+0.2014916GoogleTrend + 9.45116*10^{-5} $
+p = 2 is enough and the prediction for close price is shown in the figure below
 
-![image-20201201011452225](./Analysis/ar12.png)
+We know that all the variables we used are time series so we may use VAR model in case that the variables are not correlated 
 
-By splitting the data we used in the model to two parts, the training set and the test set, we can predict the value for the next few days after the training set, and the result is shown in the figure.
+#### VAR MODEL
+
+
+
+After GARCH model we can see that the variance of the errors will come close to a constant, however, the prediction is a straight line so we will not give the prediction for the GARCH model
+
+![res_garch](/Users/yuxinmiao/Desktop/406proj/res_garch.png)
+
+![garch_acf](/Users/yuxinmiao/Desktop/406proj/garch_acf.png)
+
+
+
+We can use the pacf plot to find the order of the GARCH model
+
+The residuals of the mean model of a time series is , The ARCH model is used to solve the heteroscedasticity of the time series. Though we solved correlated errors, the variance of the residuals is still not a constant.
+
+#### GARCH Model
 
 The total square error is 16094.49.
 
+By splitting the data we used in the model to two parts, the training set and the test set, we can predict the value for the next few days after the training set, and the result is shown in the figure.
 
+![image-20201201011452225](/Users/yuxinmiao/Desktop/406proj/ar12.png)
+
+
+
+the model can be written as
+
+  From the diagnose plot we know that the model is reasonable except that there exists heteroskedasticity in the residuals
+
+ ![image-20201201004238427](/Users/yuxinmiao/Desktop/406proj/ar11.png) 
+
+![image-20201130223927985](/Users/yuxinmiao/Desktop/406proj/ar10.png) 
+
+we can get the residual plot shown below.
 
 
 
@@ -259,21 +352,31 @@ The total square error is 16094.49.
 
 Specifically, past observations are weighted with a geometrically decreasing ratio.
 
-## Simple Exponential Smoothing (SES)
+#### Simple Exponential Smoothing (SES)
 
 The method is suitable for univariate time series without trend and seasonal components. 
 
 <img src="./Analysis/SES1.png" alt="image-20201129153441194" style="zoom:120%;" />
 
-## Holt’s Method
+score:
+
+fit1: 6701.632437495861
+
+fit2: 6573.91041630164
+
+fit3: 6537.613494767057
+
+#### Holt’s Method
 
 <img src="./Analysis/holt.png" alt="image-20201129153441194" style="zoom:120%;" />
 
+linear: 34673.692281152245
+
+Exponential: 59450.00678899398
 
 
 
-
-### Holt-Winter (HWES)
+#### Holt-Winter (HWES)
 
 With a constant seasonality component along with an increasing trend, we may try  **Holt-Winter additive model** 
 
@@ -285,11 +388,22 @@ With a constant seasonality component along with an increasing trend, we may try
 
 Train test spilt with  training set and 20 test set 
 
-### SARIMA
+1: 20779.479557174884
+
+2: 15185.219213036527
+
+#### SARIMA
 
 <img src="./Analysis/sarima.png" alt="image-20201129153441194" style="zoom:120%;" />
 
+1: 30738.298243798577
 
 
-## VAR for multivariate time series
 
+
+
+
+
+## Model Comparison 
+
+<img src="./Analysis/score.png" alt="image-20201129153441194" style="zoom:120%;" />
