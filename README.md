@@ -14,9 +14,9 @@
 
 # Source Code Usage
 
-**The final model is in Final.R ** 
+**The final model is in Final.R** 
 
-**The analysis procedure is in Folder : ./Analysis/ **
+**The analysis procedure is in Folder : ./Analysis/**
 
 
 
