@@ -1,0 +1,107 @@
+---
+title: "GARCH"
+author: "lbq"
+date: "2020/11/29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# GARCH MODEL
+
+\[
+a_t = \sigma_t \varepsilon_t,
+\quad
+\sigma_t^2 = \alpha_0 + \sum_{i=1}^m \alpha_i a_{t-i}^2 + \sum_{j=1}^s \beta_j \sigma_{t-j}^2
+\]
+
+so  for example GARCH(1,1)
+\[
+a_t = \sigma_t \varepsilon_t,
+\quad \varepsilon_t \text{ i.i.d. N} (0,1)\\
+\sigma_t^2 = \alpha_0 + \alpha_1 a_{t-1}^2 + \beta_1 \sigma_{t-1}^2
+\]
+
+```{r}
+getwd()
+library(forecast)
+TSLA.full = read.csv("scaled_centered.csv", header = T)
+TSLA.full
+TSLA.full$Date = as.Date(TSLA.full$Date, format = "%Y-%m-%d")
+library(xts)
+x = xts(log(TSLA.full$Close), TSLA.full$Date)
+plot(TSLA.full$Date, x, xlab = "date", ylab = "log Close", type = 'l')
+TSLA.ts = ts(X)
+
+library(fGarch, quietly = TRUE)
+mod1 <- garchFit( ~1 + garch(1,1), data=TSLA.ts, trace=T)
+summary(mod1)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

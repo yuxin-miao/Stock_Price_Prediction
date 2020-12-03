@@ -1,0 +1,72 @@
+---
+title: "pca_analysis"
+author: "Zhao Shensong"
+date: "11/30/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+  In this part, we mainly want to address the problem of collinearity among the regressors.
+The method we use is Principal Component Analysis.
+
+  Firstly, we will load the data into R. We discard the column of Date since it has character symbols. Adj.Close is discarded because it is the same as the closing price. While deaths column has too many zeroes which is not good for selecting regressors.
+
+```{r}
+tesla.df = read.table(file = "/Users/zhaoshensong/Desktop/VE406/project/11_30full.csv", 
+                         sep = ",", header = TRUE)
+tesla.df = tesla.df[, -1]   # Date
+tesla.df = tesla.df[, -5]   # Adj.Close
+tesla.df = tesla.df[, -7]   # deaths
+tesla.df
+```
+
+  Here we conduct PCA analysis using prcomp() function. Before we conduct, we need to scale and center all the data to the same order of magnitudes.
+
+  Then we want to analyze the result of PCA. First of all, we draw the line graph to show how much proportion of variance does each principal component explain. Besides, we also show the numeric value for the cumulative proportion of variance explained by PCA components. Therefore, we pick the first four principal components that explain 92.05% variance, which is enough for our model.
+  
+  Furthermore, we show the coefficients of each variable in each PCA component. In case we need it to establish the formula for predicting.
+
+```{r}
+tesla.PCA = prcomp(tesla.df, center = TRUE, scale = TRUE)
+tesla_variance = cumsum(tesla.PCA$sdev ^ 2) / sum(tesla.PCA$sdev ^ 2)
+
+## Plot the line graph of variance proportion explained by PCA component.
+plot(tesla_variance, col = 2, type = "c", xlab = 'Number of principal components',
+     ylab = "Proportion of variance expained", ylim = c(0.45, 1))
+points(tesla_variance, pch = 20, col = 4)
+
+## Give the value of Cumulative Proportion for each principal components.
+summary(tesla.PCA)
+
+## Find out the expression formula for each individual PCA component.
+tesla.PCA$rotation
+```
+
+Since we have decided to use the first 4 components, then we want to find out the improvement it brings to the collinearity problem.
+
+First we will conduct an overall independence check among the four principal components. We plot the pair plot to see whether there is still relationship in them. On the diagnol we plot histogram to have more information on the components. The upper and lower panels are symmetric and are the scattered plots.
+```{r}
+## The first four principal components in PCA.
+tesla.PCA$x[,1:4]
+
+## Draw pairs plot to see whether there is improvement in collinearity.
+## Put histograms on the diagonal.
+panel.hist <- function(x, ...)
+{
+  usr <- par("usr"); on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  h <- hist(x, plot = FALSE)
+  breaks <- h$breaks; nB <- length(breaks)
+  y <- h$counts; y <- y/max(y)
+  rect(breaks[-nB], 0, breaks[-1], y, col = "cyan", ...)
+}
+
+## Plot the pairs.
+pairs(~(tesla.PCA$x[, 1] + tesla.PCA$x[, 2] + tesla.PCA$x[, 3] + tesla.PCA$x[, 4]), panel = panel.smooth, cex = 0.8, pch = 1, bg = "light blue", horOdd=TRUE, diag.panel = panel.hist, cex.labels = 0.8, font.labels = 1, labels = c("PC1","PC2","PC3","PC4"))
+
+## Plot the correlation matrix.
+rcorr(cbind(tesla.PCA$x[, 1], tesla.PCA$x[, 2], tesla.PCA$x[, 3], tesla.PCA$x[, 4]), type=c("pearson","spearman"))
+```
+
+From the covariance matrix, we know that PCA can solve the collinearity problem to a large extent. And the plot also shows that PCA components are fairly independent since there is no significant trend in the plots.

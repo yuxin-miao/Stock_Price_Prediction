@@ -1,16 +1,34 @@
+# IMPORTANT NOTE 
 
+- This is the project of course *VE406, apply linear regression using R*, offered in UM-SJTU JI in 2020Fall. Professor Tong, Zhu.
+- The project mainly focus on analysis procedure, but not final model training/test accuracy. So no popular machine learning algorithm (for regression root requirement). 
+- **Goal**: Predict Tesla Stock Price during 2020-12-07 — 2020-12-11. No long term prediction accuracy considered. 
+- **Quick overview:** see poster in *./Poster* 
+- **Honor Code:** If there is similar project in the future, it is the responsibility of JI students not to copy or modify these codes, or TeX files because it is against the Honor Code. The owner of this repository dosen't take any commitment for other's faults.
+
+ 
+
+# VE406 PROJECT - Tesla Stock Price Prediction
+
+ Boqun Li, Shensong Zhao, Xinmiao Yu
 
 # Source Code Usage
 
+**The final model is in Final.R ** 
 
+**The analysis procedure is in Folder : ./Analysis/ **
+
+
+
+This code is used to predict the closing prices of TESLA from 2020.12.7 to 2020.12.11. 	
+
+To use the code, you need to **set** the work directory where you need to place your output. After run all the code you will get
+
+a text file contains the close price of TESLA from 2020.12.7 to 2020.12.11, separated by a new line character.
 
 
 
 # Tesla Stock Price Prediction
-
-**The final model is in **
-
-**The analysis procedure is in **
 
 The whole project following the flow chart. Our final model is **AR** model. <img src="./Analysis/proce.png" alt="image-20201129152911108" style="zoom:50%;" />
 
@@ -118,17 +136,17 @@ Nearly all of the points in year 2020 are considered as outliers, so year 2020 m
 
 First we decide to use muti-linear regression to find which variable is related to the close price
 
-![image-20201130225722531](/Users/yuxinmiao/Desktop/406proj/ar1.png) ![image-20201130225831838](/Users/yuxinmiao/Desktop/406proj/ar2.png)
+![image-20201130225722531](./Analysis/ar1.png) ![image-20201130225831838](./Analysis/ar2.png)
 
-![image-20201130225850817](/Users/yuxinmiao/Desktop/406proj/ar3.png) ![image-20201130225950829](/Users/yuxinmiao/Desktop/406proj/ar4.png)
+![image-20201130225850817](./Analysis/ar3.png) ![image-20201130225950829](./Analysis/ar4.png)
 
 From the mlr model we can see that the OilPrice , DPRIME, TOTALSA , GoogleTrend, new_cases are relevant
 
-![res_lm](/Users/yuxinmiao/Desktop/406proj/res_lm.png)
+![res_lm](./Analysis/res_lm.png)
 
 
 
-![image-20201130213009088](/Users/yuxinmiao/Desktop/406proj/ar6.png)    ![image-20201130213335024](/Users/yuxinmiao/Desktop/406proj/ar7.png)       
+![image-20201130213009088](./Analysis/ar6.png)    ![image-20201130213335024](./Analysis/ar7.png)       
 
 
 
@@ -268,13 +286,13 @@ From the covariance matrix, we know that PCA can solve the collinearity problem 
 
 The residuals shows that the errors are correlated. so we seek AR model for help.  The ar model could solve the corelated errors
 
-![image-20201201092224335](/Users/yuxinmiao/Desktop/406proj/ar9.png)
+![image-20201201092224335](./Analysis/ar9.png)
 
-![image-20201201092716458](/Users/yuxinmiao/Desktop/406proj/res_arima.png)
+![image-20201201092716458](./Analysis/res_arima.png)
 
 The model we used is AR(10) and then we can construct the final model of the price using AR model.
 
-![image-20201201091948465](/Users/yuxinmiao/Desktop/406proj/ar0.png)
+![image-20201201091948465](./Analysis/ar0.png)
 
 by splitting the data set to two parts, and we use the first part as the training set, we can get the sum of squared error which is
 
@@ -284,7 +302,7 @@ by splitting the data set to two parts, and we use the first part as the trainin
 
 First we need the time series to be stationary,  so we take the log of the close price 
 
-![image-20201130213801620](/Users/yuxinmiao/Desktop/406proj/ar8.png)   ![image-20201130213953728](/Users/yuxinmiao/Desktop/406proj/ar9-6832562.png)
+![image-20201130213801620](./Analysis/ar8.png)   ![image-20201130213953728](./Analysis/ar9.png)
 
 for the log price, we need first find the order of the AR model. From the acf plot we know that after lag = 10, the residuals will have a low correlation so we tried AR(10) and use the command arima(10, 1, 0) to get the lowest AIC. 
 
@@ -302,7 +320,7 @@ model = arima(TSLA.full$Close,xreg = cbind(o = TSLA.full$OilPrice, d = TSLA.full
 -4.034938e+01  2.014916e-01  9.451161e-05
 ```
 
-![var](/Users/yuxinmiao/Desktop/406proj/var.png)
+![var](./Analysis/var.png)
 
 p = 2 is enough and the prediction for close price is shown in the figure below
 
@@ -314,9 +332,9 @@ We know that all the variables we used are time series so we may use VAR model i
 
 After GARCH model we can see that the variance of the errors will come close to a constant, however, the prediction is a straight line so we will not give the prediction for the GARCH model
 
-![res_garch](/Users/yuxinmiao/Desktop/406proj/res_garch.png)
+![res_garch](./Analysis/res_garch.png)
 
-![garch_acf](/Users/yuxinmiao/Desktop/406proj/garch_acf.png)
+![garch_acf](./Analysis/garch_acf.png)
 
 
 
@@ -330,7 +348,7 @@ The total square error is 16094.49.
 
 By splitting the data we used in the model to two parts, the training set and the test set, we can predict the value for the next few days after the training set, and the result is shown in the figure.
 
-![image-20201201011452225](/Users/yuxinmiao/Desktop/406proj/ar12.png)
+![image-20201201011452225](./Analysis/ar12.png)
 
 
 
@@ -338,9 +356,9 @@ the model can be written as
 
   From the diagnose plot we know that the model is reasonable except that there exists heteroskedasticity in the residuals
 
- ![image-20201201004238427](/Users/yuxinmiao/Desktop/406proj/ar11.png) 
+ ![image-20201201004238427](./Analysis/ar11.png) 
 
-![image-20201130223927985](/Users/yuxinmiao/Desktop/406proj/ar10.png) 
+![image-20201130223927985](./Analysis/ar10.png) 
 
 we can get the residual plot shown below.
 

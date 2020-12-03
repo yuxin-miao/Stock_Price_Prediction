@@ -1,0 +1,62 @@
+---
+title: "GLMM_model"
+author: "Zhao Shensong"
+date: "12/1/2020"
+output: html_document
+---
+
+Load the data into R and eliminate the column of Date, Adj.Close and deaths.
+
+```{r}
+tesla.df = read.table(file = "/Users/zhaoshensong/Desktop/VE406/project/11_30full.csv", 
+                         sep = ",", header = TRUE)
+tesla.df = tesla.df[, -5]   # Adj.Close
+tesla.df = tesla.df[, -7]   # deaths
+tesla.df
+
+plot(tesla.df$TOTALSA, ylab = "Total Mobile Sale", xlab = "Date")
+plot(tesla.df$DPRIME, ylab = "Bank Prime Interest Rate", xlab = "Date")
+```
+Here we want to fit mutilple catogories of data. We notice that for the TOTALSA and DPRIME, these two data are only recorded monthly. However, for our stock price or oil price, the data is collected daily. Hence we would have same TOTALSA and DPRIME for certain stock closing price.
+
+To solve this problem, Generalized Linear Mixed Model(GLMM) is used. The two variables will be taken as random effect, the others taken as the fixed effect. The random effect is assumed to only affect the intercept of the model.
+
+```{r}
+library(lme4)
+# tesla.scaled = scale(tesla.df, center = TRUE, scale = TRUE)
+
+## Split the original dataset to training set and testing set.
+tesla.training = tesla.df[0:202,]
+tesla.testing = tesla.df[203:nrow(tesla.df),]
+
+## Full model 
+tesla.glmm = glmer(formula = Close ~ OilPrice + GoogleTrend + new_cases + (1 | DPRIME) + (1 | TOTALSA), data = data.frame(tesla.training))
+
+## Model with only DPRIME
+tesla.DPRIME = glmer(formula = Close ~ OilPrice + GoogleTrend + new_cases + (1 | DPRIME), data = data.frame(tesla.training))
+
+## Model with only TOTALSA
+tesla.TOTALSA = glmer(formula = Close ~ OilPrice + GoogleTrend + new_cases + (1 | TOTALSA), data = data.frame(tesla.training))
+
+summary(tesla.glmm)
+summary(tesla.DPRIME)
+summary(tesla.TOTALSA)
+```
+Then we try to compare among these models to decide which model is the best one. We use anova table and compare AIC and BIC among these models.
+
+```{r}
+anova(tesla.TOTALSA, tesla.glmm, tesla.DPRIME)
+```
+Make predictions and evaluate the models.
+
+```{r}
+glmm_pred = predict(tesla.TOTALSA, tesla.testing)
+score = sum((tesla.df$Close[203:222] - glmm_pred)^2)
+score
+
+# Plot the prediction value and the real value for close price in the testing set.
+plot(c(203:222), glmm_pred, lwd = 2, col = "blue", main = "prediction for GLMM",
+     xlab = "time index", ylab = "close price", lty = 1, type = "l", 
+     xlim = c(100, 222), ylim = c(200, 500))
+lines(tesla.df$Close, col = "red", lwd = 2)
+```
